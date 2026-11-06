@@ -14,10 +14,14 @@ jobs:
           fetch-depth: 0 # Required for deep secret scanning history
 
       # --- GATE 1: SECRET SCANNING ---
+            # --- GATE 1: SECRET SCANNING (UPDATED) ---
       - name: Scan for Secrets (TruffleHog)
-        uses: trufflesecurity/trufflehog-enterprise-github-action@main
+        uses: trufflesecurity/trufflehog@main
         with:
-          args: base --head ${{ github.event.pull_request.head.sha }}
+          base: ${{ github.event.pull_request.base.sha || github.event.before }}
+          head: ${{ github.event.pull_request.head.sha || github.sha }}
+          extra_args: --results=verified,unknown
+
 
       - name: Perform CodeQL Analysis
         if: github.event.repository.private == false
