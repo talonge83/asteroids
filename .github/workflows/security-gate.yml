@@ -22,7 +22,7 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: javascript-typescript # Change to your project's languages
+          languages: javascript-typescript, python # Change to your project's languages
       
       - name: Perform CodeQL Analysis
         if: github.event.repository.private == false
