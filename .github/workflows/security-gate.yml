@@ -18,6 +18,7 @@ jobs:
           fetch-depth: 0 # Required for deep secret scanning history
 
       # --- GATE 1: SECRET SCANNING ---      - name: Scan for Secrets (TruffleHog)
+      - name: Scan for Secrets (TruffleHog)
         uses: trufflesecurity/trufflehog@main
         with:
           base: ${{ github.event.pull_request.base.sha || github.event.before }}
