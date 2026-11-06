@@ -1,0 +1,32 @@
+name: Security Gate
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for deep secret scanning history
+
+      # --- GATE 1: SECRET SCANNING ---
+      - name: Scan for Secrets (TruffleHog)
+        uses: trufflesecurity/trufflehog-enterprise-github-action@main
+        with:
+          args: base --head ${{ github.event.pull_request.head.sha }}
+
+      - name: Perform CodeQL Analysis
+        if: github.event.repository.private == false
+        uses: github/codeql-action/analyze@v3
+
+      # Option B: If your repo is PRIVATE, use Semgrep (Free tier works great in CI)
+      - name: Scan with Semgrep
+        if: github.event.repository.private == true
+        run: |
+          pip install semgrep
+          semgrep ci --config=auto --error
+
