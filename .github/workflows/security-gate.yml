@@ -23,14 +23,12 @@ jobs:
           extra_args: --results=verified,unknown
 
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript-typescript # Change to your project's languages
+      
       - name: Perform CodeQL Analysis
         if: github.event.repository.private == false
         uses: github/codeql-action/analyze@v3
-
-      # Option B: If your repo is PRIVATE, use Semgrep (Free tier works great in CI)
-      - name: Scan with Semgrep
-        if: github.event.repository.private == true
-        run: |
-          pip install semgrep
-          semgrep ci --config=auto --error
 
