@@ -17,12 +17,20 @@ jobs:
         with:
           fetch-depth: 0 # Required for deep secret scanning history
 
+      - name: Verify PR scan range
+        run: | 
+          echo "Base: ${{ github.event.pull_request.base.sha }}"
+          echo "Head: ${{ github.event.pull_request.head.sha }}"
+          git diff --name-only \
+          "${{ github.event.pull_request.base.sha }}" \
+          "${{ github.event.pull_request.head.sha }}"
+
       # --- GATE 1: SECRET SCANNING ---      - name: Scan for Secrets (TruffleHog)
       - name: Scan for Secrets (TruffleHog)
         uses: trufflesecurity/trufflehog@main
         with:
-          base: ${{ github.event.pull_request.base.sha || github.event.before }}
-          head: ${{ github.event.pull_request.head.sha || github.sha }}
+          base: ${{ github.event.pull_request.base.sha }}
+          head: ${{ github.event.pull_request.head.sha }}
           extra_args: --results=verified,unknown,unverified --fail-on-scan-errors
 
 
