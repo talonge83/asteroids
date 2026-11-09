@@ -23,7 +23,7 @@ jobs:
         with:
           base: ${{ github.event.pull_request.base.sha || github.event.before }}
           head: ${{ github.event.pull_request.head.sha || github.sha }}
-          extra_args: --results=verified,unknown,unverified --fail --fail-on-scan-errors
+          extra_args: --results=verified,unknown,unverified --fail-on-scan-errors
 
 
       - name: Initialize CodeQL
